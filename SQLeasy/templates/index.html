@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros with context %}
+
+{% block body %}
+<title>SQLeasy</title>
+
+{{ macros.database_create_form() }}
+<div class="row">
+    {% for i in dbs %}
+    {{ macros.database_card(i, loop.index) }}
+    {% endfor %}
+</div>
+{% endblock %}

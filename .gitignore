@@ -1,0 +1,6 @@
+.sh
+.env
+/tests/
+/__pycache__/
+/SQLeasy/__pycache__/
+SQLeasy.egg-info/

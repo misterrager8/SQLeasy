@@ -1,0 +1,64 @@
+{% macro database_card(database_, id) %}
+<div class="col-xl-4">
+    <div class="p-3 border-bottom mb-3">
+        <div class="d-flex justify-content-between">
+            <a class="fs-5" href="{{ url_for('database', name=database_.name) }}">{{ database_.name }}</a>
+            <span class="badge"><i class="bi bi-table"></i> {{ database_.show_tables() | length }} table(s)</span>
+        </div>
+        <div class="mt-3">
+            <a onclick="toggleDiv('deleteDB' + {{ id }})" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash3"></i> Drop</a>
+            <a href="{{ url_for('drop_database', name=database_.name) }}" style="display: none" id="deleteDB{{ id }}" class="text-danger">Drop?</a>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro table_card(table_, id) %}
+<div class="col-xl-12">
+    <div class="p-3 border-bottom mb-3">
+        <span class="fs-5">{{ table_.name }}</span>
+        <div class="mt-2 fst-italic">
+            {% for i in table_.describe() %}
+            <div class="ps-5">
+                <span>{{ i[0] }}</span>
+                <span class="text-uppercase">{{ i[1].decode() }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mt-4">
+            <a class="btn btn-sm btn-outline-secondary me-2" onclick="toggleDiv('showCreate' + {{ id }})"><i class="bi bi-asterisk"></i> Show Create</a>
+            <a class="btn btn-sm btn-outline-danger me-2" onclick="toggleDiv('dropTable' + {{ id }})"><i class="bi bi-trash3"></i> Drop</a>
+            <a href="{{ url_for('drop_table', dbname=table_.database.name, tablename=table_.name) }}" class="text-danger" id="dropTable{{ id }}" style="display: none">Drop?</a>
+        </div>
+        <textarea rows="15" class="w-100 form-control border-0 mt-4 font-monospace" style="display: none" id="showCreate{{ id }}">{{ table_.show_create()[0][1] }}</textarea>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro database_create_form() %}
+<form method="POST" action="{{ url_for('create_database') }}" class="input-group">
+    <input required class="form-control" placeholder="Name" name="name" autocomplete="off">
+    <button class="btn btn-outline-success"><i class="bi bi-plus-lg"></i> Create Database</button>
+</form>
+{% endmacro %}
+
+{% macro table_create_form(database_) %}
+<form method="POST" action="{{ url_for('create_table', dbname=database_.name) }}">
+    <input required class="form-control mb-3" placeholder="Table Name" name="name" autocomplete="off">
+    
+    <div class="mb-3">
+        <div class="input-group" id="newCol">
+            <input required class="form-control" placeholder="Column Name" name="col" autocomplete="off">
+            <select name="datatype" class="form-control">
+                <option value="TEXT">TEXT</option>
+                <option value="INT">INT</option>
+                <option value="DATETIME">DATETIME</option>
+                <option value="BOOLEAN">BOOLEAN</option>
+            </select>
+        </div>
+    </div>
+    
+    <a onclick="newColumn()" class="btn w-100 text-success"><i class="bi bi-plus-lg"></i> New Column</a>
+    <button class="btn btn-outline-success w-100 mt-3"><i class="bi bi-plus-lg"></i> Create Table</button>
+</form>
+{% endmacro %}
