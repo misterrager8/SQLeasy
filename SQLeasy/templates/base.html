@@ -11,7 +11,15 @@
             <a class="navbar-brand" href="{{ url_for('index') }}"><i class="bi bi-key"></i> SQLeasy</a>
             <a class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navContent"><i class="bi bi-list"></i></a>
             <div class="collapse navbar-collapse" id="navContent">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-target="#themes"><i class="bi bi-palette-fill"></i></a>
+                        <div id="themes" class="dropdown-menu dropdown-menu-end text-center">
+                            <a class="dropdown-item" onclick="changeTheme('light')">Light</a>
+                            <a class="dropdown-item" onclick="changeTheme('dark')">Dark</a>
+                            <a class="dropdown-item" onclick="changeTheme('charcoal')">Charcoal</a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

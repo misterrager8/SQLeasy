@@ -1,4 +1,4 @@
-from flask import current_app, render_template, request, redirect, url_for
+from flask import current_app, redirect, render_template, request, url_for
 
 from SQLeasy import cursor_
 from SQLeasy.models import Database
