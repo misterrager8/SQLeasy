@@ -13,12 +13,8 @@
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-target="#themes"><i class="bi bi-palette-fill"></i></a>
-                        <div id="themes" class="dropdown-menu dropdown-menu-end text-center">
-                            <a class="dropdown-item" onclick="changeTheme('light')">Light</a>
-                            <a class="dropdown-item" onclick="changeTheme('dark')">Dark</a>
-                            <a class="dropdown-item" onclick="changeTheme('charcoal')">Charcoal</a>
-                        </div>
+                        <a id="dark" onclick="setLight()"><i class="bi bi-sun-fill"></i></a>
+                        <a id="light" onclick="setDark()"><i class="bi bi-moon-fill"></i></a>
                     </li>
                 </ul>
             </div>
