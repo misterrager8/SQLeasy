@@ -13,7 +13,7 @@ html[data-theme="charcoal"] {
     --primary-txt: white;
 }
 
-body {
+body, nav {
     background-color: var(--primary-bg);
     color: var(--primary-txt);
 }
@@ -27,4 +27,13 @@ a, a:hover, .nav-link, .nav-link:hover {
 .form-control, .form-control:focus {
     background-color: inherit;
     color: inherit;
+}
+
+.nav-link, .btn, .font-custom, ::placeholder, .navbar-brand {
+    letter-spacing: 2px;
+    font-size: 0.9em;
+}
+
+.hover:hover {
+    border-bottom: 1px solid;
 }

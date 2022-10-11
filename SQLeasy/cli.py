@@ -35,7 +35,7 @@ def show_tables(name):
     """Show tables in db"""
     for i in Database(name).show_tables():
         click.secho(f"\nTABLE: {i.name}")
-        for j in i.describe():
+        for j in i.description:
             click.secho(j, fg="cyan")
 
 

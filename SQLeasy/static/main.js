@@ -1,6 +1,3 @@
-
-
-
 $(document).ready(function() {{
     localStorage.getItem('SQLeasy') === 'dark' ? setDark() : setLight();
 }});
