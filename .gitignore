@@ -1,8 +1,8 @@
-.sh
 .env
-/tests/
-SQLeasy.egg-info/
+sqleasy.egg-info/
 .DS_Store
 *.pyc
 todo.txt
-todos.json
+.coverage
+htmlcov/
+tests/

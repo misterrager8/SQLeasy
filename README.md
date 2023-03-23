@@ -9,8 +9,6 @@ Set up a .env file with the following environment variables:
 
 <code>
 	
-debug=0
-env=production
 user=[USER]
 password=[PASSWORD]
 host=[HOST]
