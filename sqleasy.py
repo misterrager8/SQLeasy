@@ -1,8 +1,10 @@
 import os
+import webbrowser
 
 import click
 import dotenv
 import mysql.connector
+from flask import Flask, Response, render_template, request
 
 # CONFIG
 
@@ -17,6 +19,11 @@ FG_COLOR = os.getenv("fg_color") or "blue"
 
 mysql_ = mysql.connector.connect(user=USER, password=PASSWORD, host=HOST)
 cursor_ = mysql_.cursor()
+
+app = Flask(
+    __name__, template_folder="webview/templates", static_folder="webview/static"
+)
+
 
 # MODELS
 
@@ -41,6 +48,9 @@ class Database(object):
 
     def drop(self):
         cursor_.execute(f"DROP DATABASE {self.name}")
+
+    def to_dict(self):
+        return dict(name=self.name, tables=[i.name for i in self.tables])
 
 
 class Table(object):
@@ -78,6 +88,9 @@ class Table(object):
             ]
         )
 
+    def to_dict(self):
+        return dict(name=self.name, columns=[i.to_dict() for i in self.columns])
+
 
 class Column(object):
     def __init__(
@@ -106,6 +119,9 @@ class Column(object):
         cursor_.execute(
             f"ALTER TABLE {database}.{table} MODIFY COLUMN {self.name} {new_type}"
         )
+
+    def to_dict(self):
+        return dict(name=self.name, type_=self.type)
 
 
 # MAIN
@@ -226,4 +242,83 @@ def drop_table(db):
     click.secho(f"Table dropped from {db}.", fg=FG_COLOR)
 
 
+@cli.command()
+@click.option("-d", "--debug", is_flag=True)
+def web(debug):
+    """Launch web interface."""
+    if not debug:
+        webbrowser.open("http://localhost:5000")
+    app.run(debug=debug)
+
+
 # API
+
+
+@app.get("/")
+def index():
+    return render_template("index.html")
+
+
+@app.get("/show_dbs")
+def show_dbs():
+    return dict(dbs=[i.name for i in Database.all()])
+
+
+@app.post("/create_database")
+def create_database():
+    database_ = Database(request.form.get("name"))
+    database_.create()
+
+    return database_.to_dict()
+
+
+@app.get("/get_database")
+def get_database():
+    return Database(request.args.get("name")).to_dict()
+
+
+@app.get("/delete_database")
+def delete_database():
+    database_ = Database(request.args.get("name"))
+    database_.drop()
+
+    return Response(status=200)
+
+
+@app.post("/create_table")
+def create_table():
+    table_ = Table(request.form.get("database"), request.form.get("name"))
+    table_.create()
+
+    return table_.to_dict()
+
+
+@app.get("/get_table")
+def get_table():
+    return Table(request.args.get("database"), request.args.get("name")).to_dict()
+
+
+@app.get("/delete_table")
+def delete_table():
+    table_ = Table(request.args.get("database"), request.args.get("name"))
+    table_.drop()
+
+    return Response(status=200)
+
+
+@app.post("/create_column")
+def create_column():
+    Column(request.form.get("name"), type_=request.form.get("type_")).add(
+        request.form.get("database"), request.form.get("table")
+    )
+
+    return Response(status=200)
+
+
+@app.get("/delete_column")
+def delete_column():
+    Column(request.args.get("name")).drop(
+        request.args.get("database"), request.args.get("table")
+    )
+
+    return Response(status=200)

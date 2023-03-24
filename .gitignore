@@ -2,7 +2,7 @@
 sqleasy.egg-info/
 .DS_Store
 *.pyc
-todo.txt
 .coverage
 htmlcov/
 tests/
+todos.txt
